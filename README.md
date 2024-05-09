@@ -62,6 +62,6 @@ export default [
 
 ## Testing
 
-Lint Script: npm run lint
+- **Lint Script**: npm run lint
 
 Use curl to test the API. On Windows, remember to use curl.exe to avoid conflicts with PowerShell aliases: curl.exe localhost:8080
