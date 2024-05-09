@@ -25,16 +25,16 @@ To ensure code quality and consistency, ESLint is configured with the following 
 
 Follow the prompts to select the appropriate configurations for your project environment.
 
-✔ How would you like to use ESLint? · problems
-✔ What type of modules does your project use? · commonjs
-✔ Which framework does your project use? · none
-✔ Does your project use TypeScript? · javascript
-✔ Where does your code run? · node
-The config that you've selected requires the following dependencies:
+✔ How would you like to use ESLint? · problems  
+✔ What type of modules does your project use? · commonjs  
+✔ Which framework does your project use? · none  
+✔ Does your project use TypeScript? · javascript  
+✔ Where does your code run? · node  
+The config that you've selected requires the following dependencies:  
 
-globals, @eslint/js, eslint
-✔ Would you like to install them now? · No / Yes (Select Yes)
-✔ Which package manager do you want to use? · npm
+globals, @eslint/js, eslint  
+✔ Would you like to install them now? · No / Yes (Select Yes)  
+✔ Which package manager do you want to use? · npm  
 
 
 2. The `eslint.config.mjs` file is set up as follows:
