@@ -1,8 +1,10 @@
 // modifications to src/app.js
 
 const express = require('express');
+const passport = require('passport');
 const cors = require('cors');
 const helmet = require('helmet');
+const authenticate = require('./auth');
 const compression = require('compression');
 
 // author and version from our package.json file
@@ -30,8 +32,11 @@ app.use(cors());
 // Use gzip/deflate compression middleware
 app.use(compression());
 
-// Define a simple health check route. If the server is running
-// we'll respond with a 200 OK.  If not, the server isn't healthy.
+// Set up our passport authentication middleware
+passport.use(authenticate.strategy());
+app.use(passport.initialize());
+
+// Define our routes
 app.use('/', require('./routes'));
 
 // Add 404 middleware to handle any requests for resources that can't be found
