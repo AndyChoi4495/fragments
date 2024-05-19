@@ -12,6 +12,10 @@ const app = require('./app');
 // Get the desired port from the process' environment. Default to `8080`
 const port = parseInt(process.env.PORT || '8080', 10);
 
+if (process.env.LOG_LEVEL === 'debug') {
+  logger.info(process.env, 'Environment variables');
+}
+
 // Start a server listening on this port
 const server = stoppable(
   app.listen(port, () => {

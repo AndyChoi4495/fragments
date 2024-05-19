@@ -1,10 +1,11 @@
 // modifications to src/app.js
 
-const express = require('express');
 const passport = require('passport');
+const authenticate = require('./auth');
+const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-const authenticate = require('./auth');
+
 const compression = require('compression');
 
 // author and version from our package.json file
@@ -20,6 +21,10 @@ const pino = require('pino-http')({
 // Create an express app instance we can use to attach middleware and HTTP routes
 const app = express();
 
+// Set up our passport authentication middleware
+passport.use(authenticate.strategy());
+app.use(passport.initialize());
+
 // Use pino logging middleware
 app.use(pino);
 
@@ -31,10 +36,6 @@ app.use(cors());
 
 // Use gzip/deflate compression middleware
 app.use(compression());
-
-// Set up our passport authentication middleware
-passport.use(authenticate.strategy());
-app.use(passport.initialize());
 
 // Define our routes
 app.use('/', require('./routes'));
