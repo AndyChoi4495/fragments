@@ -32,8 +32,8 @@ module.exports.createErrorResponse = function (code, message) {
   return {
     status: 'error',
     error: {
-      code: 404,
-      message: 'not found',
+      code: code || 404,
+      message: message || 'not found',
     },
   };
 };
