@@ -150,7 +150,11 @@ class Fragment {
    */
   get formats() {
     // TODO
-    if (this.mimeType === 'text/plain') return ['text/plain'];
+    if (this.mimeType === 'text/plain') {
+      return ['text/plain'];
+    }
+
+    return [];
   }
 
   /**
