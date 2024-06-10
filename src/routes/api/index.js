@@ -1,5 +1,6 @@
 // src/routes/api/index.js
 const contentType = require('content-type');
+const { Fragment } = require('../../model/fragment');
 const rawBody = () =>
   express.raw({
     inflate: true,
