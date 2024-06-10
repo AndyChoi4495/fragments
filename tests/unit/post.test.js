@@ -1,9 +1,7 @@
 const request = require('supertest');
 const express = require('express');
-const { Fragment } = require('../../src/model/fragment');
 const router = require('../../src/routes/index');
 const { hashEmail } = require('../../src/hash');
-const logger = require('../../src/logger');
 
 const app = express();
 app.use(express.raw({ type: '*/*', limit: '5mb' })); // Ensure raw body parser is used

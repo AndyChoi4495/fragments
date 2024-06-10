@@ -1,7 +1,6 @@
 // src/routes/api/get.js
 const { Fragment } = require('../../model/fragment');
 const logger = require('../../logger');
-const { parse } = require('content-type');
 /**
  * Get a list of fragments for the current user
  */
