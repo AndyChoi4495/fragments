@@ -58,7 +58,7 @@ app.use((err, req, res, next) => {
   // We may already have an error response we can use, but if not,
   // use a generic `500` server error and message.
   const status = err.status || 500;
-  const message = err.message || 'unable to process request';
+  const message = err.message || 'invalid request';
 
   // If this is a server error, log something so we can see what's going on.
   if (status > 499) {
