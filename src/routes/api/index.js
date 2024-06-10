@@ -1,4 +1,5 @@
 // src/routes/api/index.js
+const contentType = require('content-type');
 const rawBody = () =>
   express.raw({
     inflate: true,
@@ -12,7 +13,6 @@ const rawBody = () =>
     },
   });
 
-const logger = require('../../logger');
 /**
  * The main entry-point for the v1 version of the fragments API.
  */
@@ -27,6 +27,6 @@ router.get('/fragments', require('./get'));
 //router.get('/fragments/:id', require('./get'));
 
 // Other routes (POST, DELETE, etc.) will go here later on...
-router.post('/fragments', /* rawBody(), */ require('./post'));
+router.post('/fragments', rawBody(), require('./post'));
 
 module.exports = router;

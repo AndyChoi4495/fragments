@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
         fragments: fragments,
       });
     }
-    const [fragmentId, extension] = id.split('.');
+    const [fragmentId] = id.split('.');
     const fragment = await Fragment.byId(ownerId, fragmentId);
 
     if (!fragment) {
