@@ -10,31 +10,15 @@ module.exports = async (req, res) => {
 
   try {
     const ownerId = req.user;
-    const { id } = req.params;
+    // Get all fragments for the user
+    const fragments = await Fragment.byUser(ownerId, false);
 
-    if (!id) {
-      // Get all fragments for the user
-      const fragments = await Fragment.byUser(ownerId, false);
-      return res.status(200).json({
-        status: 'ok',
-        fragments: fragments,
-      });
-    }
-    const [fragmentId] = id.split('.');
-    const fragment = await Fragment.byId(ownerId, fragmentId);
-
-    if (!fragment) {
-      logger.warn(`Fragment not found: ${fragmentId}`);
-      return res.status(404).json({ error: 'Fragment not found' });
-    }
-
-    let data = await fragment.getData();
-    let type = fragment.type;
-
-    res.setHeader('Content-Type', type);
-    res.send(data);
+    return res.status(200).json({
+      status: 'ok',
+      fragments: fragments,
+    });
   } catch (error) {
-    console.error(error);
+    logger.error('Error retrieving fragments', error);
     res.status(500).json({ status: 'error', message: 'Internal Server Error' });
   }
 };

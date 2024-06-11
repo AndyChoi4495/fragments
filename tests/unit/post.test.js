@@ -1,71 +1,104 @@
-const request = require('supertest');
-const express = require('express');
-const router = require('../../src/routes/index');
-const { hashEmail } = require('../../src/hash');
+const contentType = require('content-type');
+const { Fragment } = require('../../src/model/fragment.js');
+const logger = require('../../src/logger.js');
+const postHandler = require('../../src/routes/api/post.js');
 
-const app = express();
-app.use(express.raw({ type: '*/*', limit: '5mb' })); // Ensure raw body parser is used
-app.use('/v1/fragments', router);
+jest.mock('content-type');
+jest.mock('../../src/model/fragment.js');
+jest.mock('../../src/logger.js');
 
-describe('POST /v1/fragments', () => {
-  it('should create a fragment for authenticated user', async () => {
-    const response = await request(app)
-      .post('/v1/fragments')
-      .set('Authorization', 'Basic test')
-      .set('Content-Type', 'text/plain')
-      .send('This is a test fragment');
+describe('postHandler', () => {
+  let req, res;
 
-    expect(response.status).toBe(201);
-    expect(response.headers['content-type']).toContain('application/json');
-    // expect(response.headers.location).toMatch(/\/v1\/fragments\/[a-f0-9-]+$/);
+  beforeEach(() => {
+    req = {
+      body: Buffer.from('test data'),
+      headers: { 'content-type': 'text/plain' },
+      user: 'testUser',
+      protocol: 'http',
+      get: jest.fn().mockReturnValue('localhost:3000'),
+    };
+    res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+      location: jest.fn().mockReturnThis(),
+    };
 
-    expect(response.body).toEqual(
-      expect.objectContaining({
-        status: 'ok',
-        fragment: expect.objectContaining({
-          id: expect.any(String),
-          ownerId: hashEmail('test@example.com'),
-          type: 'text/plain',
-          size: 21,
-          created: expect.any(String),
-          updated: expect.any(String),
-        }),
-      })
-    );
+    contentType.parse.mockReturnValue({ type: 'text/plain' });
+    Fragment.isSupportedType.mockReturnValue(true);
   });
 
-  it('should return 415 for unsupported content type', async () => {
-    const response = await request(app)
-      .post('/v1/fragments')
-      .set('Authorization', 'Basic test')
-      .set('Content-Type', 'application/msword')
-      .send('This is a test fragment');
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-    expect(response.status).toBe(415);
-    expect(response.body).toEqual({
-      error: 'Unsupported media type: application/msword',
+  test('should return 400 if request body is not a buffer', async () => {
+    req.body = 'not a buffer';
+
+    await postHandler(req, res);
+
+    expect(logger.warn).toHaveBeenCalledWith('Request body is not a buffer');
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ error: 'Invalid request body' });
+  });
+
+  test('should return 415 if content type is not supported', async () => {
+    Fragment.isSupportedType.mockReturnValue(false);
+
+    await postHandler(req, res);
+
+    expect(logger.warn).toHaveBeenCalledWith('Unsupported media type: text/plain');
+    expect(res.status).toHaveBeenCalledWith(415);
+    expect(res.json).toHaveBeenCalledWith({ error: 'Unsupported media type: text/plain' });
+  });
+
+  test('should return 201 and create a new fragment', async () => {
+    const fragmentMock = {
+      id: 'fragmentId',
+      ownerId: 'testUser',
+      created: '2024-06-10T00:00:00Z',
+      updated: '2024-06-10T00:00:00Z',
+      type: 'text/plain',
+      size: 9,
+      setData: jest.fn(),
+    };
+    Fragment.mockImplementation(() => fragmentMock);
+
+    await postHandler(req, res);
+
+    expect(logger.info).toHaveBeenCalledWith('Created new fragment object', {
+      fragment: fragmentMock,
+    });
+    expect(fragmentMock.setData).toHaveBeenCalledWith(req.body);
+    expect(logger.info).toHaveBeenCalledWith('Fragment data set successfully');
+    expect(logger.info).toHaveBeenCalledWith('Fragment created successfully', {
+      fragment: fragmentMock,
+    });
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.location).toHaveBeenCalledWith('http://localhost:3000/v1/fragments/fragmentId');
+    expect(res.json).toHaveBeenCalledWith({
+      status: 'ok',
+      fragment: {
+        id: 'fragmentId',
+        ownerId: 'testUser',
+        created: '2024-06-10T00:00:00Z',
+        updated: '2024-06-10T00:00:00Z',
+        type: 'text/plain',
+        size: 9,
+      },
     });
   });
 
-  it('should return 400 if request body is not a buffer', async () => {
-    const response = await request(app)
-      .post('/v1/fragments')
-      .set('Authorization', 'Basic test')
-      .set('Content-Type', 'text/plain')
-      .send({ key: 'value' });
-
-    expect(response.status).toBe(400);
-    expect(response.body).toEqual({
-      error: 'Invalid request body',
+  test('should return 500 on internal server error', async () => {
+    const error = new Error('Internal Server Error');
+    Fragment.mockImplementation(() => {
+      throw error;
     });
+
+    await postHandler(req, res);
+
+    expect(logger.error).toHaveBeenCalledWith('Error creating fragment', error);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
   });
-
-  /* it('should return 401 for unauthenticated requests', async () => {
-    const response = await request(app)
-      .post('/v1/fragments')
-      .set('Content-Type', 'text/plain')
-      .send('This is a test fragment');
-
-    expect(response.status).toBe(401);
-  }); */
 });
