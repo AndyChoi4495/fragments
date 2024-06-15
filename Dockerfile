@@ -1,4 +1,4 @@
-#  docker run --rm --name fragments --env-file env.jest -e LOG_LEVEL=debug -p 8080:8080 -d fragments:latest
+
 
 # Use node version 18.13.0
 FROM node:18.13.0
