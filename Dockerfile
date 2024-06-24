@@ -17,7 +17,7 @@ ENV NPM_CONFIG_COLOR=false
 WORKDIR /app
 
 # Copy the package.json and package-lock.json files into /app
-COPY package*.json ./
+COPY package.json package-lock.json ./
 
 # Install node dependencies defined in package-lock.json
 RUN npm ci
@@ -40,6 +40,10 @@ ENV NPM_CONFIG_COLOR=false
 
 # Use /app as our working directory
 WORKDIR /app
+
+# Copy the package.json and package-lock.json files into /app
+COPY --from=builder /app/package.json /app/package.json
+COPY --from=builder /app/package-lock.json /app/package-lock.json
 
 # Copy the node_modules from the builder stage
 COPY --from=builder /app/node_modules /app/node_modules
