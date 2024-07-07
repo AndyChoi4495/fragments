@@ -31,10 +31,9 @@ jobs:
 
         # Use buildx, which is faster and can optimize the build steps
       - name: Set up Docker Buildx
-        uses:
-          docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v2
 
-          # NOTE: ending and restarting the Learner Lab will void these secrets,
+      # NOTE: ending and restarting the Learner Lab will void these secrets,
       # update them if you are doing this during a new session:
       # `Error: The security token included in the request is expired`
       - name: Configure AWS Credentials using Secrets
