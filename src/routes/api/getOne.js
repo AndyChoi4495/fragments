@@ -1,4 +1,4 @@
-const { Fragment } = require('../../model/fragment');
+/* const { Fragment } = require('../../model/fragment');
 const logger = require('../../logger');
 
 module.exports = async (req, res) => {
@@ -35,3 +35,4 @@ module.exports = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+ */
