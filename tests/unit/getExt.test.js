@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 app.use(router);
 
-jest.mock('../../model/fragment');
+jest.mock('../../src/model/fragment.js');
 
 describe('GET /v1/fragments/:id.ext', () => {
   let fragment;
