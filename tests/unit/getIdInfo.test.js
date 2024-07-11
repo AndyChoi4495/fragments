@@ -1,7 +1,7 @@
 const request = require('supertest');
 const express = require('express');
-const router = require('../routes/fragments');
-const { Fragment } = require('../../model/fragment');
+const router = require('../../src/routes/index');
+const { Fragment } = require('../../src/model/fragment');
 const app = express();
 
 app.use(express.json());
