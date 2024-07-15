@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
     const fragments = await Fragment.byUser({ ownerId, expand });
 
     // Prepare the response
-    const res = {
+    const response = {
       status: 'ok',
       fragments: expand
         ? fragments.map((fragment) => ({
@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
     logger.info('Fetched fragments successfully', { ownerId, expand });
 
     // Return the response
-    res.status(200).json(res);
+    res.status(200).json(response);
   } catch (err) {
     logger.error('Error fetching fragments', err);
     res.status(500).json({ error: 'Internal Server Error' });

@@ -12,12 +12,13 @@ describe('GET /v1/fragments?expand=1', () => {
   test('should fetch all fragments and return minimal information when expand is not set', async () => {
     const fragments = [{ id: '1' }, { id: '2' }];
 
-    Fragment.byUser = jest.fn().mockReturnValue(fragments);
+    Fragment.byUser.mockResolvedValue(fragments);
 
     const res = await request(app)
       .get('/v1/fragments')
       .auth('user1@email.com', 'password1')
       .expect(200);
+
     expect(res.body).toEqual({
       status: 'ok',
       fragments: fragments.map((fragment) => ({ id: fragment.id })),
@@ -44,12 +45,13 @@ describe('GET /v1/fragments?expand=1', () => {
       },
     ];
 
-    Fragment.byUser = jest.fn().mockReturnValue(fragments);
+    Fragment.byUser.mockResolvedValue(fragments);
 
     const res = await request(app)
       .get('/v1/fragments?expand=1')
       .auth('user1@email.com', 'password1')
       .expect(200);
+
     expect(res.body).toEqual({
       status: 'ok',
       fragments: fragments.map((fragment) => ({
@@ -73,5 +75,35 @@ describe('GET /v1/fragments?expand=1', () => {
       .expect(500);
 
     expect(res.body).toEqual({ message: 'Internal Server Error', status: 'error' });
+  });
+
+  test('should handle no fragments and return empty array', async () => {
+    Fragment.byUser.mockResolvedValue([]);
+
+    const res = await request(app)
+      .get('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .expect(200);
+
+    expect(res.body).toEqual({
+      status: 'ok',
+      fragments: [],
+    });
+  });
+
+  test('should handle invalid expand parameter and return minimal information', async () => {
+    const fragments = [{ id: '1' }, { id: '2' }];
+
+    Fragment.byUser.mockResolvedValue(fragments);
+
+    const res = await request(app)
+      .get('/v1/fragments?expand=invalid')
+      .auth('user1@email.com', 'password1')
+      .expect(200);
+
+    expect(res.body).toEqual({
+      status: 'ok',
+      fragments: fragments.map((fragment) => ({ id: fragment.id })),
+    });
   });
 });
