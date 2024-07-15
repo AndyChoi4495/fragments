@@ -4,7 +4,7 @@ const { Fragment } = require('../../src/model/fragment');
 
 jest.mock('../../src/model/fragment');
 
-describe('GET /v1/fragments/?expand=1', () => {
+describe('GET /v1/fragments?expand=1', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -47,7 +47,7 @@ describe('GET /v1/fragments/?expand=1', () => {
     Fragment.byUser = jest.fn().mockReturnValue(fragments);
 
     const res = await request(app)
-      .get('/v1/fragments/?expand=1')
+      .get('/v1/fragments?expand=1')
       .auth('user1@email.com', 'password1')
       .expect(200);
     expect(res.body).toEqual({
@@ -68,7 +68,7 @@ describe('GET /v1/fragments/?expand=1', () => {
     Fragment.byUser.mockRejectedValue(error);
 
     const res = await request(app)
-      .get('/v1/fragments/?expand=1')
+      .get('/v1/fragments?expand=1')
       .auth('user1@email.com', 'password1')
       .expect(500);
 
