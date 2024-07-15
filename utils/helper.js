@@ -24,25 +24,25 @@ const jsonToCsv = (json) => {
 
 // Helper function to perform the conversion
 const convertFragment = async (fragment, extension) => {
-  const { data, type } = fragment;
+  const { type, data } = fragment;
   try {
     switch (extension) {
       case 'html':
         if (type === 'text/markdown') {
-          return md.render(data.toString());
+          return md.render(data);
         }
         break;
       case 'txt':
         if (type === 'text/markdown' || type === 'text/html' || type === 'application/json') {
-          return data.toString();
+          return data;
         }
         break;
       case 'csv':
         if (type === 'application/json') {
-          return jsonToCsv(JSON.parse(data.toString()));
+          return jsonToCsv(JSON.parse(data));
         }
         if (type === 'text/csv') {
-          return data.toString();
+          return data;
         }
         break;
       default:

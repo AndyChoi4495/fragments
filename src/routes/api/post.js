@@ -20,7 +20,12 @@ module.exports = async (req, res) => {
     }
 
     // Create a new fragment
-    const fragment = new Fragment({ ownerId: req.user, type, size: req.body.length });
+    const fragment = new Fragment({
+      ownerId: req.user,
+      type,
+      size: req.body.length,
+      data: req.body,
+    });
     logger.info('Created new fragment object', { fragment });
 
     // Set the fragment data
@@ -47,6 +52,7 @@ module.exports = async (req, res) => {
           updated: fragment.updated,
           type: fragment.type,
           size: fragment.size,
+          data: fragment.data,
         },
       });
   } catch (err) {

@@ -3,10 +3,11 @@ const logger = require('../../logger');
 
 module.exports = async (req, res) => {
   const { id } = req.params;
-
+  const parts = id.split('/');
+  const baseId = parts[0];
   try {
     // Find the fragment by ID and user ID
-    const fragment = await Fragment.byId({ ownerId: req.user, id });
+    const fragment = await Fragment.byId(req.user, baseId);
 
     if (!fragment) {
       logger.warn(`Fragment not found: ${id}`);
@@ -27,6 +28,6 @@ module.exports = async (req, res) => {
     });
   } catch (err) {
     logger.error('Error retrieving fragment metadata', err);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error', id });
   }
 };

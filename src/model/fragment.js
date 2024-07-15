@@ -15,7 +15,7 @@ const {
 } = require('./data');
 
 class Fragment {
-  constructor({ id, ownerId, created, updated, type, size = 0 }) {
+  constructor({ id, ownerId, created, updated, type, size = 0, data = null }) {
     if (!ownerId || !type) {
       throw new Error('ownerId and type are required');
     }
@@ -32,6 +32,7 @@ class Fragment {
     this.updated = updated || new Date().toISOString();
     this.type = type;
     this.size = size;
+    this.data = data ? data.toString() : null;
   }
 
   /**
