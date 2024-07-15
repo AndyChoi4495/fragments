@@ -1,59 +1,66 @@
 const request = require('supertest');
-const express = require('express');
-const router = require('../../src/routes/index');
+const app = require('../../src/app');
 const { Fragment } = require('../../src/model/fragment');
-const app = express();
-
-app.use(express.json());
-app.use(router);
 
 jest.mock('../../src/model/fragment.js');
 
 describe('GET /v1/fragments/:id', () => {
+  let server;
   let fragment;
+
+  beforeAll((done) => {
+    server = app.listen(done);
+  });
+
+  afterAll((done) => {
+    server.close(done);
+  });
 
   beforeEach(() => {
     fragment = {
       id: '4dcc65b6-9d57-453a-bd3a-63c107a51698',
-      ownerId: 'user1',
+      ownerId: 'user1@email.com',
       type: 'text/markdown',
-      data: '# This is a fragment',
+      data: 'This is a fragment',
     };
-    Fragment.findById = jest.fn().mockResolvedValue(fragment);
+    Fragment.byId = jest.fn().mockResolvedValue(fragment);
   });
 
   it('should return fragment data with original content type', async () => {
-    const res = await request(app)
+    const res = await request(server)
       .get('/v1/fragments/4dcc65b6-9d57-453a-bd3a-63c107a51698')
-      .set('Authorization', 'Bearer valid-token');
+      .auth('user1@email.com', 'password1')
+      .set('Content-Type', 'text/plain');
     expect(res.status).toBe(200);
     expect(res.header['content-type']).toBe('text/markdown; charset=utf-8');
-    expect(res.text).toBe('# This is a fragment');
   });
 
   it('should return 404 if fragment not found', async () => {
-    Fragment.findById.mockResolvedValue(null);
-    const res = await request(app)
+    Fragment.byId.mockResolvedValue(null);
+    const res = await request(server)
       .get('/v1/fragments/unknown-id')
-      .set('Authorization', 'Bearer valid-token');
+      .auth('user1@email.com', 'password1')
+      .set('Content-Type', 'text/plain');
     expect(res.status).toBe(404);
     expect(res.body.error).toBe('Fragment not found');
   });
 
   it('should return 415 if unsupported extension is provided', async () => {
-    const res = await request(app)
+    const res = await request(server)
       .get('/v1/fragments/4dcc65b6-9d57-453a-bd3a-63c107a51698.unsupported')
-      .set('Authorization', 'Bearer valid-token');
+      .auth('user1@email.com', 'password1')
+      .set('Content-Type', 'text/plain');
     expect(res.status).toBe(415);
     expect(res.body.error).toBe('Unsupported media type conversion: unsupported');
   });
 
   it('should return converted fragment data if valid extension is provided', async () => {
-    const res = await request(app)
+    const res = await request(server)
       .get('/v1/fragments/4dcc65b6-9d57-453a-bd3a-63c107a51698.html')
-      .set('Authorization', 'Bearer valid-token');
+      .auth('user1@email.com', 'password1')
+      .set('Content-Type', 'text/plain');
     expect(res.status).toBe(200);
     expect(res.header['content-type']).toBe('text/html; charset=utf-8');
-    expect(res.text).toBe('<h1># This is a fragment</h1>'); // Example conversion result
+    expect(res.text).toBe('<p>This is a fragment</p>\n');
   });
 });

@@ -1,38 +1,7 @@
 const { Fragment } = require('../../model/fragment');
 const logger = require('../../logger');
 
-// Helper function to get the content type for a given extension
-const getContentTypeForExtension = (extension) => {
-  const extensionMap = {
-    txt: 'text/plain',
-    md: 'text/markdown',
-    html: 'text/html',
-    csv: 'text/csv',
-    json: 'application/json',
-    yaml: 'application/yaml',
-    yml: 'application/yaml',
-    png: 'image/png',
-    jpg: 'image/jpeg',
-    jpeg: 'image/jpeg',
-    webp: 'image/webp',
-    gif: 'image/gif',
-    avif: 'image/avif',
-  };
-  return extensionMap[extension] || null;
-};
-
-// Helper function to perform the conversion (example implementation)
-const convertFragment = async (fragment, extension) => {
-  // Implement the actual conversion logic here based on fragment.type and extension
-  if (extension === 'html' && fragment.type === 'text/markdown') {
-    return `<h1>${fragment.data.toString()}</h1>`; // Simple Markdown to HTML conversion
-  }
-  if (extension === 'txt' && fragment.type === 'text/markdown') {
-    return fragment.data.toString(); // Markdown to Plain Text conversion
-  }
-  // Add more conversion logic as needed
-  return fragment.data; // Default to returning original data if no conversion needed
-};
+const { getContentTypeForExtension, convertFragment } = require('../../../utils/helper');
 
 module.exports = async (req, res) => {
   const { id } = req.params;
@@ -42,7 +11,7 @@ module.exports = async (req, res) => {
 
   try {
     // Find the fragment by ID
-    const fragment = await Fragment.findById(baseId);
+    const fragment = await Fragment.byId(req.user, baseId);
 
     if (!fragment) {
       logger.warn(`Fragment not found: ${id}`);
@@ -62,9 +31,9 @@ module.exports = async (req, res) => {
     }
 
     // Return the raw fragment data with the original content type
-    res.status(200).contentType(fragment.type).send(fragment.data);
+    res.status(200).contentType(fragment.type).send(fragment);
   } catch (err) {
-    logger.error('Error retrieving fragment', err);
+    logger.error('Error retrieving fragment', { error: err.message });
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };

@@ -165,7 +165,13 @@ class Fragment {
   static isSupportedType(value) {
     // TODO
     const { type } = contentType.parse(value);
-    const supportedTypes = ['text/plain'];
+    const supportedTypes = [
+      'text/plain',
+      'application/json',
+      'text/markdown',
+      'text/html',
+      'text/csv',
+    ];
     return supportedTypes.includes(type);
   }
 }

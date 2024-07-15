@@ -1,11 +1,6 @@
 const request = require('supertest');
-const express = require('express');
-const router = require('../../src/routes/index');
+const app = require('../../src/app');
 const { Fragment } = require('../../src/model/fragment');
-const app = express();
-
-app.use(express.json());
-app.use(router);
 
 jest.mock('../../src/model/fragment.js');
 
@@ -21,13 +16,13 @@ describe('GET /v1/fragments/:id/info', () => {
       type: 'text/plain',
       size: 20,
     };
-    Fragment.findOne = jest.fn().mockResolvedValue(fragment);
+    Fragment.byId = jest.fn().mockResolvedValue(fragment);
   });
 
   it('should return fragment metadata', async () => {
     const res = await request(app)
       .get('/v1/fragments/4dcc65b6-9d57-453a-bd3a-63c107a51698/info')
-      .set('Authorization', 'Bearer valid-token');
+      .auth('user1@email.com', 'password1');
     expect(res.status).toBe(200);
     expect(res.body).toEqual({
       status: 'ok',
@@ -43,19 +38,19 @@ describe('GET /v1/fragments/:id/info', () => {
   });
 
   it('should return 404 if fragment not found', async () => {
-    Fragment.findOne.mockResolvedValue(null);
+    Fragment.byId.mockResolvedValue(null);
     const res = await request(app)
       .get('/v1/fragments/unknown-id/info')
-      .set('Authorization', 'Bearer valid-token');
+      .auth('user1@email.com', 'password1');
     expect(res.status).toBe(404);
     expect(res.body.error).toBe('Fragment not found');
   });
 
   it('should return 500 if there is a server error', async () => {
-    Fragment.findOne.mockRejectedValue(new Error('Database error'));
+    Fragment.byId.mockRejectedValue(new Error('Database error'));
     const res = await request(app)
       .get('/v1/fragments/4dcc65b6-9d57-453a-bd3a-63c107a51698/info')
-      .set('Authorization', 'Bearer valid-token');
+      .auth('user1@email.com', 'password1');
     expect(res.status).toBe(500);
     expect(res.body.error).toBe('Internal Server Error');
   });

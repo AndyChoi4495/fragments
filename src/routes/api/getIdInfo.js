@@ -6,7 +6,7 @@ module.exports = async (req, res) => {
 
   try {
     // Find the fragment by ID and user ID
-    const fragment = await Fragment.findOne({ id, ownerId: req.user });
+    const fragment = await Fragment.byId({ ownerId: req.user, id });
 
     if (!fragment) {
       logger.warn(`Fragment not found: ${id}`);
