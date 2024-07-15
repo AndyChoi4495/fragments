@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../../src/app'); // Adjust the path as needed to match your directory structure
+const app = require('../../src/app');
 
 describe('404 handler', () => {
   it('should return 404 for non-existent routes', async () => {

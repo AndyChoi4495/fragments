@@ -4,6 +4,7 @@ const logger = require('../../logger');
 module.exports = async (req, res) => {
   try {
     const ownerId = req.user;
+    console.log(req.query.expand);
     const expand = req.query.expand === '1';
 
     // Fetch all fragments for the authenticated user

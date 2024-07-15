@@ -58,7 +58,7 @@ app.use((req, res) => {
 
 // Add error-handling middleware to deal with anything else
 // eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
+/* app.use((err, req, res, next) => {
   // We may already have an error response we can use, but if not,
   // use a generic `500` server error and message.
   const status = err.status || 500;
@@ -76,7 +76,7 @@ app.use((err, req, res, next) => {
       code: status,
     },
   });
-});
+}); */
 
 // Export our `app` so we can access it in server.js
 module.exports = app;
