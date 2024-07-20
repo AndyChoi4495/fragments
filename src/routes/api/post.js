@@ -3,12 +3,6 @@ const { Fragment } = require('../../model/fragment');
 const logger = require('../../logger');
 
 module.exports = async (req, res) => {
-  // Check if the request body is a buffer
-  if (!Buffer.isBuffer(req.body)) {
-    logger.warn('Request body is not a buffer');
-    return res.status(400).json({ error: 'Invalid request body' });
-  }
-
   try {
     // Parse the Content-Type header
     const { type } = contentType.parse(req.headers['content-type']);
@@ -17,6 +11,11 @@ module.exports = async (req, res) => {
     if (!Fragment.isSupportedType(type)) {
       logger.warn(`Unsupported media type: ${type}`);
       return res.status(415).json({ error: `Unsupported media type: ${type}` });
+    }
+    // Check if the request body is a buffer
+    if (!Buffer.isBuffer(req.body)) {
+      logger.warn('Request body is not a buffer');
+      return res.status(400).json({ error: 'Invalid request body' });
     }
 
     // Create a new fragment
