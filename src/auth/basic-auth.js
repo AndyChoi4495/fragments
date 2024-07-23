@@ -17,6 +17,7 @@ if (!process.env.HTPASSWD_FILE) {
 module.exports.strategy = () =>
   // For our Passport authentication strategy, we'll look for a
   // username/password pair in the Authorization header.
+
   authPassport(
     auth.basic({
       file: process.env.HTPASSWD_FILE,
