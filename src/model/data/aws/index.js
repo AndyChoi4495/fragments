@@ -105,13 +105,14 @@ async function listFragments(ownerId, expand = false) {
 }
 
 // Delete a fragment's metadata and data from memory db. Returns a Promise
-function deleteFragment(ownerId, id) {
-  return Promise.all([
+async function deleteFragment(ownerId, id) {
+  await Promise.all([
     // Delete metadata
     metadata.del(ownerId, id),
     // Delete data
     data.del(ownerId, id),
   ]);
+  return undefined;
 }
 
 module.exports.listFragments = listFragments;

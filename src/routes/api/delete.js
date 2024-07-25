@@ -5,10 +5,9 @@ const logger = require('../../logger');
 
 module.exports = async (req, res) => {
   const { id } = req.params;
+  const ownerId = req.user;
 
   try {
-    const ownerId = req.user;
-
     // Delete the fragment by ID
     const result = await Fragment.delete(ownerId, id);
     if (result == undefined) {
