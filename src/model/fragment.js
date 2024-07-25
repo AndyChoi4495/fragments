@@ -62,7 +62,7 @@ class Fragment {
     try {
       const fragmentData = await readFragment(ownerId, id);
       if (!fragmentData) {
-        throw new Error('Fragment not found');
+        return;
       }
       return fragmentData;
     } catch (err) {

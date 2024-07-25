@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
     // Create a new fragment
     const fragment = new Fragment({
       ownerId: req.user,
-      type,
+      type: req.get('Content-Type'),
       size: req.body.length,
       data: req.body,
     });
