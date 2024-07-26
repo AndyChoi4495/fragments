@@ -101,3 +101,10 @@ jobs:
             AWS_ACCESS_KEY_ID=ASIAXKO54QQEGRDVTKUH
             AWS_SECRET_ACCESS_KEY=cf9KqV7wM93Usy3PDe+gvyz3oo7gz1sxo01WSfas
             AWS_SESSION_TOKEN=IQoJb3JpZ2luX2VjEPP//////////wEaCXVzLXdlc3QtMiJGMEQCIEEZjIooyV+uV2c7sleTt9bRMbb3bKRnnIZPIs24V0osAiALKf5s4rUwhEFlS4Zawkzfckj0X9yeo/Jcsc+5TR5ZKCq2AgjM//////////8BEAEaDDUwMzUxMzM4Mzk0NCIMH6nAu37bYyN/O866KooCCLOXGiiRzNbXig39EsXNasRzDKQcSTuSz1G45c9mczn4nPMZcXr3+z1uXizPJLkmvRQDfA6BVvO6Uhwc/FeK+zJ4lecKmPicg+VoQ6gusv/NXCc8tQFAosIDFyPvL5XeAeaAJZaw07uyzy6zwA9+vl4iDRGCX6LAICQ0hvcpDRotbVp/MYDYhpJ9wkh58wh5Fq0ktIXkHDIjrzEWvtu0ekD8mBQ7heAVUD/1uSNe63hJXEmkVvprr8iQa6Bbrd5jgtKrXGNTG+LkRf5rFiw5lxadsNTWKyASXkQqtG6E/Z5lu873Kv1tsX2dx/F5ehaXFwym6o/GgyfkaHgVY0HbnE6u0PQ4YxERyB0w/6mMtQY6ngEArxdWkOT7eAFfaiMH9ye+z33p7iYMIey2sqMQ0VWn4J2kLQd/ErTkoA6KWotN5EXq/Onyro0qEwruNK3Ko6jenkjf1GR7P8Hn4e+nnqYNIwER4mL9rAPgPyMowoGb76rHi7utEW4nLA+6ACldN+4R4vo2MgjZ8JxdLZf14qePRzkyNciXK7zZDrnKMnLQdMTjDHvFmcIj27zXxxd2hA==
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.update-task-def.outputs.task-definition }}
+          cluster: fragments-cluster
+          service: fragments-service
+          wait-for-service-stability: true
