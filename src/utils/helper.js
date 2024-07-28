@@ -1,6 +1,6 @@
 const MarkdownIt = require('markdown-it');
 const md = new MarkdownIt();
-const logger = require('../src/logger');
+const logger = require('../logger');
 
 // Helper function to get the content type for a given extension
 const getContentTypeForExtension = (extension) => {

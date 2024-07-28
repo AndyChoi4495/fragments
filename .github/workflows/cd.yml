@@ -101,6 +101,7 @@ jobs:
             AWS_ACCESS_KEY_ID=ASIAXKO54QQEKMG7LG5U
             AWS_SECRET_ACCESS_KEY=ChGQwp73IKh5wDyora2N0Z8beAXcZ8yhMWwL+nO1
             AWS_SESSION_TOKEN=IQoJb3JpZ2luX2VjEDYaCXVzLXdlc3QtMiJIMEYCIQDd/CeihgpJ8NRcnyrxXxZOffY2XeYC1cFEqGweoVemswIhAP7i9G+3VDV033OCirdhNZdRVkLcUrLUwor32yQHVZyOKq0CCB4QARoMNTAzNTEzMzgzOTQ0Igxbolgme4SYUvSKSJkqigIBl+ctdiVt195Jf3Gex70cl+Gf3LbUqFCGuZRtORbd0nPV0O/HpF+K7QyTJTj+I5SMadk1l2gKqSLXlkmCXCO4BplNgkvxOUCNSC93Tsv5AbnaSlNi8YY/gyYQeNjT92Jo6KCm8Hb/A6fc8pD/c+A0EMLOa79qk4tXcr47NE/q1j/y4EOjoUqlHV8xamRMKHHjrnQDqTtM0Lfl9fwailne7kTOGBnerHWgVCJ3X9UVIsCFxN6kj2EAlSFht2GxZmghsJX2JcZkQBNF8WppqxbwLY4YbF+gP9XHNnn2bCPTydjWXYuBz5oDrzsfdXBNXCEv8OU6kfBbNUYC9Dsg2jnJDhP+liBeZxo7cjDy65q1BjqcAbcYJV3ibUZ59C+6k2xFGGzYJ4qUm2rQDuGApvF1bWNZ6TWXKkRsNtWOJp/81v3es9nk+BtrtXBAwvdGFCPX1ty2A/PmMC5Ib5xAD9C5H/3Gzgh3Ln2gO9vFhuxWP+b4nycdykDFKBRHBf18bUIIkw/YMZ0TFZkJcfHHG5mcqRTUSzm3USoHJJer/zeltR3xh6np8cE+PW4bS/eiZw==
+            PORT=8080
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
