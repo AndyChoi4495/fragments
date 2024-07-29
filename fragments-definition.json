@@ -1,14 +1,14 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:us-east-1:503513383944:task-definition/fragments-task:13",
+  "taskDefinitionArn": "arn:aws:ecs:us-east-1:503513383944:task-definition/fragments_task:2",
   "containerDefinitions": [
     {
-      "name": "fragments",
+      "name": "fragments-container",
       "image": "yun4495/fragments:latest",
       "cpu": 256,
       "memoryReservation": 512,
       "portMappings": [
         {
-          "name": "fragments-container-80-tcp",
+          "name": "fragments-80-tcp",
           "containerPort": 80,
           "hostPort": 80,
           "protocol": "tcp",
@@ -34,16 +34,12 @@
           "value": "http://fragments-lb-776037001.us-east-1.elb.amazonaws.com"
         },
         {
-          "name": "PORT",
-          "value": "8080"
-        },
-        {
           "name": "AWS_ACCESS_KEY_ID",
           "value": "ASIAXKO54QQEJGQEY7VM"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
-          "value": "AK2AmOVapC073Qyhvz+wvMW0QCfVsKWUKtmdYSDt+nO1"
+          "value": "AK2AmOVapC073Qyhvz+wvMW0QCfVsKWUKtmdYSDt"
         },
         {
           "name": "HTPASSWD_FILE",
@@ -73,7 +69,7 @@
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/fragments-task",
+          "awslogs-group": "/ecs/fragments_task",
           "awslogs-create-group": "true",
           "awslogs-region": "us-east-1",
           "awslogs-stream-prefix": "ecs"
@@ -83,11 +79,11 @@
       "systemControls": []
     }
   ],
-  "family": "fragments-task",
+  "family": "fragments_task",
   "taskRoleArn": "arn:aws:iam::503513383944:role/LabRole",
   "executionRoleArn": "arn:aws:iam::503513383944:role/LabRole",
   "networkMode": "awsvpc",
-  "revision": 13,
+  "revision": 2,
   "volumes": [],
   "status": "ACTIVE",
   "requiresAttributes": [
@@ -125,7 +121,7 @@
     "cpuArchitecture": "X86_64",
     "operatingSystemFamily": "LINUX"
   },
-  "registeredAt": "2024-07-29T14:38:34.205Z",
+  "registeredAt": "2024-07-29T15:04:53.433Z",
   "registeredBy": "arn:aws:sts::503513383944:assumed-role/voclabs/user1892799=ychoi65@myseneca.ca",
   "tags": []
 }
