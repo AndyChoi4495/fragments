@@ -1,9 +1,9 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:us-east-1:503513383944:task-definition/fragments_task:2",
+  "taskDefinitionArn": "arn:aws:ecs:us-east-1:503513383944:task-definition/fragments_task:6",
   "containerDefinitions": [
     {
       "name": "fragments-container",
-      "image": "yun4495/fragments:latest",
+      "image": "503513383944.dkr.ecr.us-east-1.amazonaws.com/fragments:v0.8.10",
       "cpu": 256,
       "memoryReservation": 512,
       "portMappings": [
@@ -34,6 +34,10 @@
           "value": "http://fragments-lb-776037001.us-east-1.elb.amazonaws.com"
         },
         {
+          "name": "PORT",
+          "value": "80"
+        },
+        {
           "name": "AWS_ACCESS_KEY_ID",
           "value": "ASIAXKO54QQEJGQEY7VM"
         },
@@ -62,10 +66,8 @@
           "value": "debug"
         }
       ],
-      "environmentFiles": [],
       "mountPoints": [],
       "volumesFrom": [],
-      "ulimits": [],
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
@@ -83,7 +85,7 @@
   "taskRoleArn": "arn:aws:iam::503513383944:role/LabRole",
   "executionRoleArn": "arn:aws:iam::503513383944:role/LabRole",
   "networkMode": "awsvpc",
-  "revision": 2,
+  "revision": 6,
   "volumes": [],
   "status": "ACTIVE",
   "requiresAttributes": [
@@ -94,6 +96,9 @@
       "name": "ecs.capability.execution-role-awslogs"
     },
     {
+      "name": "com.amazonaws.ecs.capability.ecr-auth"
+    },
+    {
       "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
     },
     {
@@ -101,6 +106,9 @@
     },
     {
       "name": "com.amazonaws.ecs.capability.task-iam-role"
+    },
+    {
+      "name": "ecs.capability.execution-role-ecr-pull"
     },
     {
       "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
@@ -121,7 +129,7 @@
     "cpuArchitecture": "X86_64",
     "operatingSystemFamily": "LINUX"
   },
-  "registeredAt": "2024-07-29T15:04:53.433Z",
+  "registeredAt": "2024-07-29T15:44:20.541Z",
   "registeredBy": "arn:aws:sts::503513383944:assumed-role/voclabs/user1892799=ychoi65@myseneca.ca",
   "tags": []
 }
