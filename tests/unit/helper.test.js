@@ -1,4 +1,8 @@
-const { getContentTypeForExtension, convertFragment, jsonToCsv } = require('../../utils/helper');
+const {
+  getContentTypeForExtension,
+  convertFragment,
+  jsonToCsv,
+} = require('../../src/utils/helper');
 const MarkdownIt = require('markdown-it');
 
 describe('Helper Functions', () => {
