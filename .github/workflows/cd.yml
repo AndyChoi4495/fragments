@@ -95,10 +95,10 @@ jobs:
             PORT=8080
             AWS_COGNITO_POOL_ID=${{ secrets.AWS_COGNITO_POOL_ID }}
             AWS_COGNITO_CLIENT_ID=${{ secrets.AWS_COGNITO_CLIENT_ID }}
-            HTPASSWD_FILE=${{ secrets.HTPASSWD_FILE }}
+            HTPASSWD_FILE=tests/.htpasswd
             AWS_REGION=us-east-1
             AWS_S3_BUCKET_NAME=${{ secrets.AWS_S3_BUCKET_NAME }}
-            API_URL= ${{ secrets.API_URL }}
+            API_URL=http://fragments-lb-776037001.us-east-1.elb.amazonaws.com
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
