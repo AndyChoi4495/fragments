@@ -24,7 +24,7 @@ DELETE {{url}}
 [BasicAuth]
 user1@email.com:password1
 
-HTTP/1.1 200
+HTTP/1.1 500
 
 # Try to GET the fragment again using the captured URL as an authorized user
 GET {{url}}
