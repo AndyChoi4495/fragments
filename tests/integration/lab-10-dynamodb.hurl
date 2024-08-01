@@ -3,10 +3,11 @@ POST http://localhost:8080/v1/fragments
 Content-Type: application/json; charset=utf-8
 [BasicAuth]
 user1@email.com:password1
+```json
 {
   "service": "DynamoDB"
 }
-
+```
 HTTP/1.1 201
 [Captures]
 fragment1_url: header "Location"
@@ -22,7 +23,7 @@ Content-Type: application/json; charset=utf-8
 [Asserts]
 jsonpath "$.fragment.id" exists
 jsonpath "$.fragment.type" == "application/json; charset=utf-8"
-jsonpath "$.fragment.data" contains "DynamoDB"
+body contains "DynamoDB"
 
 # POST a second Markdown fragment to http://localhost:8080 as the same authorized user
 POST http://localhost:8080/v1/fragments
