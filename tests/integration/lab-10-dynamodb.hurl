@@ -85,5 +85,5 @@ user1@email.com:password1
 
 HTTP/1.1 200
 [Asserts]
-jsonpath "$.fragments.[0]" not contains "{{ fragment1_url 'id'}}"
-jsonpath "$.fragments.[1]" contains "{{ fragment2_url 'id'}}"
+jsonpath "$.fragments.[0]" not contains "{{fragment1_id}}"
+jsonpath "$.fragments.[1]" contains "{{ fragment2_id}}"
