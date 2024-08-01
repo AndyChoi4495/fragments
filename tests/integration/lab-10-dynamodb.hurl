@@ -59,8 +59,8 @@ user1@email.com:password1
 
 HTTP/1.1 200
 [Asserts]
-jsonpath "$.fragments.[1]" contains "{{fragment1_id}}"
-jsonpath "$.fragments.[0]" contains "{{fragment2_id}}"
+jsonpath "$.fragments.[0]" contains "{{fragment1_id}}"
+jsonpath "$.fragments.[1]" contains "{{fragment2_id}}"
 
 # DELETE the first fragment created
 DELETE {{fragment1_url}}

@@ -32,7 +32,7 @@ class Fragment {
     this.updated = updated || new Date().toISOString();
     this.type = type;
     this.size = size;
-    this.data = data ? data.toString() : null;
+    this.data = data.toString();
   }
 
   /**
