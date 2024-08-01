@@ -16,16 +16,9 @@ module.exports = async (req, res) => {
     }
 
     // Return the fragment's metadata
-    res.status(200).json({
+    return res.status(200).json({
       status: 'ok',
-      fragment: {
-        id: fragment.id,
-        ownerId: fragment.ownerId,
-        created: fragment.created,
-        updated: fragment.updated,
-        type: fragment.type,
-        size: fragment.size,
-      },
+      fragment: fragment,
     });
   } catch (err) {
     logger.error('Error retrieving fragment metadata', err);
