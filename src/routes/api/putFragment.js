@@ -1,6 +1,5 @@
-// src/routes/api/getById.js
-
 const { Fragment } = require('../../model/fragment');
+const contentType = require('content-type');
 const logger = require('../../logger');
 const sharp = require('sharp');
 const { Parser } = require('json2csv');
@@ -8,31 +7,10 @@ const yaml = require('js-yaml');
 const MarkdownIt = require('markdown-it');
 const md = new MarkdownIt();
 
-// Helper function to get the content type for a given extension
-const getContentTypeForExtension = (extension) => {
-  const extensionMap = {
-    txt: 'text/plain',
-    md: 'text/markdown',
-    html: 'text/html',
-    csv: 'text/csv',
-    json: 'application/json',
-    yaml: 'application/yaml',
-    yml: 'application/yaml',
-    png: 'image/png',
-    jpg: 'image/jpeg',
-    jpeg: 'image/jpeg',
-    webp: 'image/webp',
-    gif: 'image/gif',
-    avif: 'image/avif',
-  };
-  return extensionMap[extension] || null;
-};
 // Helper function to convert JSON to CSV
-
 const jsonToCsv = (json) => {
   const parser = new Parser();
-  const csv = parser.parse(json);
-  return csv;
+  return parser.parse(json);
 };
 
 // Helper function to perform the conversion
@@ -114,34 +92,58 @@ const convertFragment = async (fragment, extension) => {
 
 module.exports = async (req, res) => {
   const { id } = req.params;
-  const parts = id.split('.');
-  const baseId = parts[0];
-  const extension = parts.length > 1 ? parts.pop() : null;
+  const userId = req.user;
+  const { type } = contentType.parse(req.headers['content-type']);
 
   try {
     // Find the fragment by ID
-    const fragment = await Fragment.byId(req.user, baseId);
+    const fragment = await Fragment.byId(userId, id);
+    let newData = fragment.type;
+    // If the fragment does not exist, return a 404 error
     if (!fragment) {
       logger.warn(`Fragment not found: ${id}`);
       return res.status(404).json({ error: 'Fragment not found' });
     }
-
-    if (extension) {
-      const targetContentType = getContentTypeForExtension(extension);
-      if (!targetContentType) {
-        logger.warn(`Unsupported media type conversion: ${extension}`);
-        return res.status(415).json({ error: `Unsupported media type conversion: ${extension}` });
-      }
-
-      // Convert the fragment to the target type if necessary
-      const convertedData = await convertFragment(fragment, extension);
-      return res.status(200).contentType(targetContentType).send(convertedData);
+    if (
+      !['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/avif'].includes(fragment.type)
+    ) {
+      newData = req.body;
     }
 
-    // Return the raw fragment data with the original content type
-    res.status(200).contentType(fragment.type).send(fragment);
-  } catch (err) {
-    logger.error('Error retrieving fragment', { error: err.message });
+    if (!newData) {
+      logger.warn('Empty request body received');
+      return res.status(400).json({ error: 'Request body is empty or malformed' });
+    }
+
+    const bufferData = Buffer.isBuffer(newData) ? newData : Buffer.from(newData, 'utf-8');
+
+    // Convert the fragment if the type has changed
+    let finalData = bufferData;
+
+    if (fragment.type !== type) {
+      const convertedData = await convertFragment({ type: fragment.type, data: bufferData }, type);
+      fragment.type = type;
+      finalData = convertedData;
+    }
+
+    // Update the fragment's data using setData
+    await fragment.setData(finalData);
+
+    // Return the updated fragment metadata
+    await res.status(200).json({
+      status: 'ok',
+      fragment: {
+        id: fragment.id,
+        ownerId: fragment.ownerId,
+        created: fragment.created,
+        updated: fragment.updated,
+        type: fragment.type,
+        size: fragment.size,
+        data: fragment.data,
+      },
+    });
+  } catch (error) {
+    logger.error('Error updating fragment', { error });
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };

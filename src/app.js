@@ -44,6 +44,9 @@ app.use(compression());
 // Define our routes
 app.use('/', require('./routes'));
 
+/* app.use(express.json());
+app.use(express.urlencoded({ extended: true })); */
+
 // Add 404 middleware to handle any requests for resources that can't be found
 app.use((req, res) => {
   // Pass along an error object to the error-handling middleware

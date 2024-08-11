@@ -64,7 +64,7 @@ class Fragment {
       if (!fragmentData) {
         return;
       }
-      return fragmentData;
+      return new Fragment(fragmentData);
     } catch (err) {
       throw new Error(err.message);
     }
@@ -172,6 +172,15 @@ class Fragment {
       'text/markdown',
       'text/html',
       'text/csv',
+      'application/json',
+      'application/yaml',
+      'application/yaml',
+      'image/png',
+      'image/jpeg',
+      'image/jpeg',
+      'image/webp',
+      'image/gif',
+      'image/avif',
     ];
     return supportedTypes.includes(type);
   }

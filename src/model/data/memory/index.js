@@ -29,12 +29,16 @@ async function listFragments(ownerId, expand = false) {
   const fragments = await metadata.query(ownerId);
 
   // If we don't get anything back, or are supposed to give expanded fragments, return
-  if (expand || !fragments) {
+  if (expand) {
     return fragments;
   }
 
   // Otherwise, map to only send back the ids
-  return fragments.map((fragment) => fragment.id);
+  return fragments.map((fragment) => ({
+    id: fragment.id,
+    type: fragment.type,
+    data: fragment.data,
+  }));
 }
 
 // Delete a fragment's metadata and data from memory db. Returns a Promise

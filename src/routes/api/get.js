@@ -11,11 +11,15 @@ module.exports = async (req, res) => {
   try {
     const ownerId = req.user;
     // Get all fragments for the user
-    const fragments = await Fragment.byUser(ownerId, false);
+    const fragments = await Fragment.byUser(ownerId, true);
 
     return res.status(200).json({
       status: 'ok',
-      fragments: fragments,
+      fragments: fragments.map((fragment) => ({
+        id: fragment.id,
+        type: fragment.type,
+        data: fragment.data,
+      })),
     });
   } catch (error) {
     logger.error('Error retrieving fragments', error);
