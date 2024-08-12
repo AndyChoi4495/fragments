@@ -92,7 +92,7 @@ jobs:
           environment-variables: |
             LOG_LEVEL=debug
             NODE_ENV=production
-            PORT=8080
+            PORT=80
             AWS_COGNITO_POOL_ID=us-east-1_n4CDPC1J4
             AWS_COGNITO_CLIENT_ID=qcnv4rtn53krjb7oslcsmgc1r
             HTPASSWD_FILE=tests/.htpasswd
