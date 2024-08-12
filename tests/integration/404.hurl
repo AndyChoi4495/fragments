@@ -1,4 +1,4 @@
 # 404.hurl
-GET http://localhost:8080/no-such-route
+GET http://http://fragments-lb-776037001.us-east-1.elb.amazonaws.com/no-such-route
 
 HTTP/1.1 404
