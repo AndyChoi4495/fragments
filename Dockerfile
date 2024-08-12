@@ -1,5 +1,5 @@
 # Stage 1: Build stage
-FROM node:18.13.0 AS builder
+FROM node:20.9.0 AS builder
 
 LABEL maintainer="Yunseok Choi <ychoi65@myseneca.ca>"
 LABEL description="Fragments node.js microservice"
@@ -27,7 +27,7 @@ COPY ./src ./src
 COPY ./tests/.htpasswd ./tests/.htpasswd
 
 # Stage 2: Run stage
-FROM node:18.13.0
+FROM node:20.9.0
 
 # We default to use port 8080 in our service
 ENV PORT=${PORT}
