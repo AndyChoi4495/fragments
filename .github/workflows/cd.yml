@@ -93,13 +93,16 @@ jobs:
             LOG_LEVEL=debug
             NODE_ENV=production
             PORT=8080
-            AWS_COGNITO_POOL_ID=${{ secrets.AWS_COGNITO_POOL_ID }}
-            AWS_COGNITO_CLIENT_ID=${{ secrets.AWS_COGNITO_CLIENT_ID }}
+            AWS_COGNITO_POOL_ID=us-east-1_n4CDPC1J4
+            AWS_COGNITO_CLIENT_ID=qcnv4rtn53krjb7oslcsmgc1r
             HTPASSWD_FILE=tests/.htpasswd
             AWS_REGION=us-east-1
             AWS_S3_BUCKET_NAME=${{ secrets.AWS_S3_BUCKET_NAME }}
             API_URL= http://fragments-lb-776037001.us-east-1.elb.amazonaws.com
             AWS_DYNAMODB_TABLE_NAME=${{ secrets.AWS_DYNAMODB_TABLE_NAME }}
+            AWS_ACCESS_KEY_ID=ASIAXKO54QQEMLAKLZ4F
+AWS_SECRET_ACCESS_KEY=sXs/iMIwE9zuxxKruNOa8TRJe7FiNF+qD5oW2vLf
+AWS_SESSION_TOKEN=IQoJb3JpZ2luX2VjEJn//////////wEaCXVzLXdlc3QtMiJGMEQCIGoJekiES20yBsr81XebU1mTggAZERyjuqWYv9fcerUkAiBlFWw1NF1ocVGyTOyfOWHsEeT0trcdFWNP2AlU0/x0XCq2AgiR//////////8BEAEaDDUwMzUxMzM4Mzk0NCIMIPCA28wrDAP0GT+EKooCSboXIEL4VbI1oxqBCH+pDRmX3qNAlkWGINU2KNykqAFFWllKvrgorvZgfdIHVspmLdh1jBVab5UuAf6Pnpd+t3paepnIkq4UjpRAwh2EO911ssddkR/eCUMxbBvQQ69smPdkk/lMSKuLOVsEZu0K3cDt5xkU1GXgi1IzOz4ABdzGuBBwEDw0ZKHBs4Lyw8SACMspqccK7I6XpgmZNq6+QXRZEUslR2e39KIO2BXJeURju1qiJGIxLbBckqtx/WAHtIU8MI7UA2DpFi35D6ewVUsdp4S9t4nSmnaZl+lrMpVG3Z4zF2/LrnQ8gRQ5hSLNDGWJvEAIUUyZhte8ZGKmRyzHP5415JyHhdAw++zotQY6ngH6SAMbIUuq23sr2sHv9kNtUZQDIGSIbaZMrB31fF5UfuxIjE533H0WaTixIkmcU16d5QwaearB5j/I+B8Q1KBtgYwLiZp915v19ERm1DQBz02e0YhN7uFv+5oh1Ins+SpFSM6tlWy3M+tjWHPoY2wSCXw9BHCGACdOuiaGNK1Yc6FRb5qMJSIxaSFgZQ9Y585/SJ7Kn2M0hAc17nHtYg==
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
