@@ -1,5 +1,5 @@
 # POST a new text fragment as an authorized user
-POST http://localhost:8080/v1/fragments
+POST http://fragments-lb-776037001.us-east-1.elb.amazonaws.com/v1/fragments
 Content-Type: text/plain; charset=utf-8
 [BasicAuth]
 user1@email.com:password1
