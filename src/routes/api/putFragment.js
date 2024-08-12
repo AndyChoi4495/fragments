@@ -7,6 +7,21 @@ const yaml = require('js-yaml');
 const MarkdownIt = require('markdown-it');
 const md = new MarkdownIt();
 
+// List of supported content types
+const supportedTypes = [
+  'text/plain',
+  'text/markdown',
+  'text/html',
+  'text/csv',
+  'application/json',
+  'application/yaml',
+  'image/png',
+  'image/jpeg',
+  'image/webp',
+  'image/gif',
+  'image/avif',
+];
+
 // Helper function to convert JSON to CSV
 const jsonToCsv = (json) => {
   const parser = new Parser();
@@ -92,22 +107,35 @@ const convertFragment = async (fragment, extension) => {
 
 module.exports = async (req, res) => {
   const { id } = req.params;
+
   const userId = req.user;
   const { type } = contentType.parse(req.headers['content-type']);
+
+  // Check if the content type is supported
+  if (!supportedTypes.includes(type)) {
+    logger.warn(`Unsupported content type: ${type}`);
+    return res.status(415).json({ error: 'Unsupported content type' });
+  }
 
   try {
     // Find the fragment by ID
     const fragment = await Fragment.byId(userId, id);
-    let newData = fragment.type;
+
     // If the fragment does not exist, return a 404 error
     if (!fragment) {
       logger.warn(`Fragment not found: ${id}`);
       return res.status(404).json({ error: 'Fragment not found' });
     }
+    let newData;
     if (
       !['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/avif'].includes(fragment.type)
     ) {
       newData = req.body;
+    }
+    if (
+      ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/avif'].includes(fragment.type)
+    ) {
+      newData = fragment.data;
     }
 
     if (!newData) {
@@ -127,10 +155,12 @@ module.exports = async (req, res) => {
     }
 
     // Update the fragment's data using setData
-    await fragment.setData(finalData);
+    const container = new Fragment(fragment);
+    container.data = finalData.toString('utf-8');
+    await container.setData(finalData);
 
     // Return the updated fragment metadata
-    await res.status(200).json({
+    res.status(200).json({
       status: 'ok',
       fragment: {
         id: fragment.id,

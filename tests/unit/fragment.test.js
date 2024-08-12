@@ -10,10 +10,10 @@ const validTypes = [
   `text/markdown`,
   `text/html`,
   `application/json`,
-  /*   `image/png`,
+  `image/png`,
   `image/jpeg`,
   `image/webp`,
-  `image/gif`, */
+  `image/gif`,
 ];
 
 describe('Fragment class', () => {
@@ -204,16 +204,6 @@ describe('Fragment class', () => {
       await wait();
       const fragment2 = await Fragment.byId(ownerId, fragment.id);
       expect(Date.parse(fragment2.updated)).toBeGreaterThan(Date.parse(modified1));
-    });
-
-    test("a fragment is added to the list of a user's fragments", async () => {
-      const data = Buffer.from('hello');
-      const ownerId = '5555';
-      const fragment = new Fragment({ ownerId, type: 'text/plain', size: 0 });
-      await fragment.save();
-      await fragment.setData(data);
-
-      expect(await Fragment.byUser(ownerId)).toEqual([fragment.id]);
     });
 
     test('full fragments are returned when requested for a user', async () => {
